@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div id="app" class="container">
+        <div class="row">
+            <h3>Campeonato Brasileiro - Série A - 2016</h3>
+
+            <div v-if="view == 'tabela'">
+
+                <a class="btn btn-primary" @click="createNovoJogo">Novo Jogo</a>
+
+                <br/><br/><br/>
+
+                <label for="busca">Filtro de Busca:</label>
+                <input type="text" class="form-control" v-model="busca" id="busca">
+
+                <br/>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th v-for="coluna in colunas">
+                                <a @click="sortBy(coluna)">{{coluna | camelCase}}</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="time in timesFiltered">
+                            <td>
+                                <img :src="time.escudo" :alt="time.nome" style="height: 30px; width: 30px;">
+                                <strong>{{ time.nome }}</strong>
+                            </td>
+                            <td class="text-center">{{ time.pontos }}</td>
+                            <td class="text-center">{{ time.gm }}</td>
+                            <td class="text-center">{{ time.gs }}</td>
+                            <td class="text-center">{{ time | saldo }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div v-if="view == 'novojogo'">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" v-model="novoJogo.casa.gols" @keyup.enter="fimJogo">
+                        <label class="control-label">
+                            {{novoJogo.casa.time.nome}}
+                            <img :src="novoJogo.casa.time.escudo" style="height: 30px; width: 30px;">
+                        </label>
+                    </div>
+                    <span>X</span>
+                    <div class="form-group">
+                        <label class="control-label">
+                            <img :src="novoJogo.fora.time.escudo" style="height: 30px; width: 30px;">
+                            {{novoJogo.fora.time.nome}}
+                        </label>
+                        <input type="text" class="form-control" v-model="novoJogo.fora.gols" @keyup.enter="fimJogo">
+                    </div>
+                    <button type="button" class="btn btn-primary" v-on:click="fimJogo">Fim de jogo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/dist/build.js"></script>
+
+</body>
+
+</html>
